@@ -1,4 +1,3 @@
-
 import tkinter as tk
 from tkinter import messagebox
 
@@ -52,7 +51,7 @@ class SudokuGUI:
         self.root = root
         self.root.title("Sudoku Solver - Backtracking")
         self.entries = [[None for _ in range(9)] for _ in range(9)]
-        self.fixed_cells = set()  # keep track of pre-filled (locked) cells
+        self.fixed_cells = set()
 
         # Create 9x9 grid of entry boxes
         for i in range(9):
@@ -68,14 +67,12 @@ class SudokuGUI:
 
                 self.entries[i][j] = entry
 
-        # Buttons
-        solve_btn = tk.Button(root, text="Solve Sudoku", command=self.solve_gui, bg="lightgreen", font=("Arial", 12, "bold"))
-        solve_btn.grid(row=9, column=0, columnspan=5, sticky="we", pady=10)
+        # Single Solve Button
+        solve_btn = tk.Button(root, text="Solve Sudoku", command=self.solve_gui,
+                              bg="lightgreen", font=("Arial", 12, "bold"))
+        solve_btn.grid(row=9, column=0, columnspan=9, sticky="we", pady=10)
 
-        clear_btn = tk.Button(root, text="Clear", command=self.clear_grid, bg="lightcoral", font=("Arial", 12, "bold"))
-        clear_btn.grid(row=9, column=5, columnspan=4, sticky="we", pady=10)
-
-        # If initial board is given, fill it
+        # Load initial board if given
         if initial_board:
             self.set_board(initial_board)
 
@@ -106,7 +103,7 @@ class SudokuGUI:
                 entry.delete(0, tk.END)
                 if board[i][j] != 0:
                     entry.insert(0, str(board[i][j]))
-                    entry.config(fg="blue", state="disabled")  # make it uneditable and blue
+                    entry.config(fg="blue", state="disabled")  # fixed cells
                     self.fixed_cells.add((i, j))
                 else:
                     entry.config(state="normal", fg="black")
@@ -119,17 +116,8 @@ class SudokuGUI:
         else:
             messagebox.showerror("Sudoku Solver", "No solution exists!")
 
-    def clear_grid(self):
-        """Clears only user-entered cells, keeps fixed cells"""
-        for i in range(9):
-            for j in range(9):
-                if (i, j) not in self.fixed_cells:
-                    self.entries[i][j].config(state="normal")
-                    self.entries[i][j].delete(0, tk.END)
-
 # ---------------- Main Program ----------------
 if __name__ == "__main__":
-    # Example Sudoku puzzle (0 = empty)
     puzzle = [
         [5, 3, 0, 0, 7, 0, 0, 0, 0],
         [6, 0, 0, 1, 9, 5, 0, 0, 0],
@@ -139,9 +127,9 @@ if __name__ == "__main__":
         [7, 0, 0, 0, 2, 0, 0, 0, 6],
         [0, 6, 0, 0, 0, 0, 2, 8, 0],
         [0, 0, 0, 4, 1, 9, 0, 0, 5],
-        [0, 0, 0, 0, 8, 0, 0, 7, 9]
-    ]
+        [0, 0, 0, 0, 8, 0, 0, 7, 9] ]
 
     root = tk.Tk()
-    gui = SudokuGUI(root, puzzle)  # pass puzzle to load it on start
+    gui = SudokuGUI(root, puzzle)
     root.mainloop()
+
